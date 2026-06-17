@@ -31,14 +31,37 @@ const getTasks = async (req, res) => {
   }
 };
 
-// DELETE TASK
-const deleteTask = async (req, res) => {
+// UPDATE TASK
+const updateTask = async (req, res) => {
   try {
-    await Task.findByIdAndDelete(req.params.id);
-    res.json({ message: "Task deleted" });
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(task);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-module.exports = { createTask, getTasks, deleteTask };
+// DELETE TASK
+const deleteTask = async (req, res) => {
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+
+    res.json({
+      message: "Task deleted",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  createTask,
+  getTasks,
+  updateTask,
+  deleteTask,
+};
